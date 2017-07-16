@@ -1,0 +1,8 @@
+{
+    "require": {
+        "fabs/serialize": "dev-develop",
+        "fabs/phalcon-api": "dev-develop",
+        "fabs/linq": "dev-develop",
+        "monolog/monolog": "^1.23"
+    }
+}

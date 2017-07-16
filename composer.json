@@ -1,0 +1,26 @@
+{
+  "name": "fabs/simple-api",
+  "type": "library",
+  "description": "Phalcon REST API Helper",
+  "keywords": [
+    "phalcon",
+    "rest",
+    "rest api",
+    "phalcon rest api",
+    "api"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ahmet Turk",
+      "email": "ahmetturk93@gmail.com",
+      "homepage": "https://github.com/fabsolute"
+    }
+  ],
+  "require": {
+    "ext-phalcon": ">=2.0.0"
+  },
+  "bin": [
+    "simple-api"
+  ]
+}

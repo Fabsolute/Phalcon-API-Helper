@@ -1,0 +1,20 @@
+<?php
+
+
+namespace {{NamespaceName}}\App\Config;
+
+use Fabs\Serialize\SerializableObject;
+
+class Configs extends SerializableObject
+{
+    /** @var string */
+    public $default_namespace = null;
+    /** @var string[] */
+    public $loader_namespaces = [];
+    /** @var string[] */
+    public $loader_directories = [];
+    /** @var string[] */
+    public $task_namespaces = [];
+    /** @var string[] */
+    public $api_namespaces = [];
+}

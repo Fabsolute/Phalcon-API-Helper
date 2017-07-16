@@ -1,0 +1,17 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: fabsolutely
+ * Date: 16/07/2017
+ * Time: 14:49
+ */
+
+namespace {{NamespaceName}}\App\Constant;
+
+
+class Services
+{
+    const CONFIG = 'config';
+    const CACHE = 'cache';
+    const AUTOLOAD_HANDLER = 'autoload_handler';
+}

@@ -1,0 +1,18 @@
+#!/usr/bin/env php
+<?php
+$found = false;
+foreach ($argv as $key=>$value){
+    if($value === '--debug' || $value === '--prod'){
+        unset($argv[$key]);
+        if($value ==='--debug'){
+            putenv('DEBUG_MODE=true');
+        }
+        $found = true;
+    }
+}
+if(!$found){
+    echo 'aborting, --prod or --debug required';
+    exit;
+}
+include_once 'public/index.php';
+exit;

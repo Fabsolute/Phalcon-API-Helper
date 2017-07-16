@@ -1,0 +1,17 @@
+{
+  "default_namespace": "{{NamespaceName}}",
+  "loader_namespaces": [
+    "{{NamespaceName}}\\App\\Model",
+    "{{NamespaceName}}\\App\\Model\\Sub",
+    "{{NamespaceName}}\\App\\Library",
+    "{{NamespaceName}}\\App\\Service"
+  ],
+  "loader_directories": [
+  ],
+  "task_namespaces": [
+    "{{NamespaceName}}\\App\\Task"
+  ],
+  "api_namespaces": [
+    "{{NamespaceName}}\\App\\API"
+  ]
+}

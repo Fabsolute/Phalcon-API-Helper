@@ -1,0 +1,66 @@
+<?php
+
+namespace {{NamespaceName}}\App\Library;
+
+use ErrorException;
+use Exception;
+use Fabs\Rest\Services\HttpStatusCodeHandler;
+use Fabs\Serialize\Validation\ValidationException;
+use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+
+class ExceptionHandler
+{
+    /**
+     * @param Exception $exception
+     */
+    public static function handle($exception)
+    {
+        try {
+            if ($exception instanceof ValidationException) {
+                $logger = self::getLogger('validation');
+                $log = sprintf(
+                    "\n\nfile: %s:%s\nproperty: %s validation: %s \nstacktrace: %s \ninputs: %s\ncontext: %s\n\n",
+                    $exception->getFile(),
+                    (string)$exception->getLine(),
+                    $exception->getPropertyName(),
+                    $exception->getValidatorName(),
+                    $exception->getTraceAsString(),
+                    file_get_contents('php://input'),
+                    json_encode($_SERVER)
+                );
+                $logger->error($log);
+                (new HttpStatusCodeHandler())->internalServerError();
+            } else {
+                if ($exception instanceof ErrorException) {
+                    $logger = self::getLogger('error');
+                } else {
+                    $logger = self::getLogger('exception');
+                }
+                $log = sprintf(
+                    "\n\nfile: %s:%s\nmessage: %s \nstacktrace: %s \ninputs: %s\ncontext: %s\n\n",
+                    $exception->getFile(),
+                    (string)$exception->getLine(),
+                    $exception->getMessage(),
+                    $exception->getTraceAsString(),
+                    file_get_contents('php://input'),
+                    json_encode($_SERVER)
+                );
+                $logger->error($log);
+                (new HttpStatusCodeHandler())->internalServerError();
+            }
+        } catch (\Exception $exception) {
+            // do nothing
+        }
+    }
+    private static function getLogger($name)
+    {
+        $logger = new Logger($name);
+        $formatter = new LineFormatter("%datetime% > %level_name% > %message% %context% %extra%\n", "Y-m-d H:i:s", true);
+        $handler = new StreamHandler(BASE_PATH . '/logs/' . $name . '.log', Logger::ERROR);
+        $handler->setFormatter($formatter);
+        $logger->pushHandler($handler);
+        return $logger;
+    }
+}

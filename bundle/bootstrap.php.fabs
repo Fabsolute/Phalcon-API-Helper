@@ -1,0 +1,11 @@
+<?php
+
+define('BASE_PATH', __DIR__);
+define('APP_PATH', BASE_PATH . '/App');
+require_once BASE_PATH . '/vendor/autoload.php';
+$loader = new \Phalcon\Loader();
+$loader->registerNamespaces([
+    '{{NamespaceName}}\\App\\Constant' => APP_PATH . '/Constant',
+    '{{NamespaceName}}\\App\\Core' => APP_PATH . '/Core',
+    '{{NamespaceName}}\\App\\Config' => APP_PATH . '/Config'
+])->register();

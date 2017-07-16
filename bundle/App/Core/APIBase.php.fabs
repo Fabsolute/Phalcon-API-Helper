@@ -1,0 +1,15 @@
+<?php
+
+namespace {{NamespaceName}}\App\Core;
+use {{NamespaceName}}\App\Config\Configs;
+
+/**
+ * Class APIBase
+ * @package {{NamespaceName}}\App\Core
+ *
+ * @property Configs config
+ */
+abstract class APIBase extends \Fabs\Rest\APIBase
+{
+
+}

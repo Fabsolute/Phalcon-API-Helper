@@ -1,0 +1,23 @@
+<?php
+
+namespace {{NamespaceName}}\App\API;
+
+use {{NamespaceName}}\App\Core\APIBase;
+
+class DefaultAPI extends APIBase
+{
+    /**
+     * @return string
+     */
+    public function getPrefix()
+    {
+        return '/';
+    }
+
+    public function get()
+    {
+        return [
+            'hello' => 'world'
+        ];
+    }
+}

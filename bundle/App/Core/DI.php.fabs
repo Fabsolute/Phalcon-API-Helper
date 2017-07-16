@@ -1,0 +1,60 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: fabsolutely
+ * Date: 16/07/2017
+ * Time: 14:49
+ */
+
+namespace {{NamespaceName}}\App\Core;
+
+
+use {{NamespaceName}}\App\Config\Configs;
+use {{NamespaceName}}\App\Constant\Services;
+
+class DI extends \Fabs\Rest\DI
+{
+    public function __construct()
+    {
+        parent::__construct();
+
+        $is_debug = getenv("DEBUG_MODE");
+        if ($is_debug !== false) {
+            if ($is_debug === "true") {
+                $is_debug = true;
+            } else {
+                $is_debug = false;
+            }
+        }
+
+        $this->setShared(Services::AUTOLOAD_HANDLER,function(){
+           return new AutoloadHandler();
+        });
+
+        $this->setShared(Services::CONFIG, function () use ($is_debug) {
+            if ($is_debug) {
+                $file = json_decode(file_get_contents(BASE_PATH . '/config/configs.debug.json'), true);
+            } else {
+                $file = json_decode(file_get_contents(BASE_PATH . '/config/configs.json'), true);
+            }
+            return Configs::deserialize($file);
+        });
+
+        $this->setShared(Services::CACHE, function () {
+            $frontCache = new \Phalcon\Cache\Frontend\Data(
+                [
+                    'lifetime' => 172800,
+                ]
+            );
+
+            $cache = new \Phalcon\Cache\Backend\File(
+                $frontCache,
+                [
+                    'cacheDir' => BASE_PATH . '/cache/',
+                ]
+            );
+
+            return $cache;
+        });
+    }
+}

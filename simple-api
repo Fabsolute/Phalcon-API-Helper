@@ -1,0 +1,66 @@
+#!/usr/bin/env php
+<?php
+
+define('TARGET_PATH', getcwd());
+define('CURRENT_PATH', __DIR__ . '/bundle/');
+
+function makeDir($dir_name)
+{
+    if (!file_exists($dir_name)) {
+        mkdir($dir_name);
+    }
+}
+
+function clearVariables($subject, $folder_name, $namespace_name)
+{
+    $subject = str_replace('{{NamespaceName}}', $namespace_name, $subject);
+    return str_replace('{{FolderName}}', $folder_name, $subject);
+}
+
+if ($argc === 4 && $argv[1] === 'new') {
+    $folder_name = $argv[2];
+    $namespace_name = $argv[3];
+
+    makeDir(TARGET_PATH . '/' . $folder_name);
+
+    $iterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator(CURRENT_PATH),
+        RecursiveIteratorIterator::SELF_FIRST
+    );
+
+    $folder_list = [];
+    $file_list = [];
+    foreach ($iterator as $file) {
+        if ($file->getFilename() !== '..' && $file->getFilename() !== '.') {
+            $file_name = $file->getRealPath();
+            $file_name = str_replace(CURRENT_PATH, '', $file_name);
+            if ($file->isDir()) {
+                $folder_list[] = $file_name;
+            } else {
+                if (substr($file_name, -5) === '.fabs') {
+                    $file_list[] = $file_name;
+                }
+            }
+        }
+    }
+
+    $folder_list = array_values(array_unique($folder_list));
+    $file_list = array_values(array_unique($file_list));
+
+    foreach ($folder_list as $folder) {
+        makeDir(TARGET_PATH . '/' . $folder_name . '/' . $folder);
+    }
+
+    foreach ($file_list as $file_name) {
+        $file_content = clearVariables(file_get_contents(CURRENT_PATH . '/' . $file_name), $folder_name, $namespace_name);
+        $new_file_name = str_replace('.fabs', '', clearVariables($file_name, $folder_name, $namespace_name));
+
+        file_put_contents(TARGET_PATH . '/' . $folder_name . '/' . $new_file_name, $file_content);
+    }
+
+    echo 'project created';
+
+} else {
+    echo 'usage: simple-api new folder_name NamespaceName';
+}
+exit;

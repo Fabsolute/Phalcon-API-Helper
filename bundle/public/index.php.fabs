@@ -1,0 +1,6 @@
+<?php
+
+include_once __DIR__ . '/../bootstrap.php';
+
+$di = new {{NamespaceName}}\App\Core\DI();
+$di->application->handle();

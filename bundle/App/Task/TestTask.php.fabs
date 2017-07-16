@@ -1,0 +1,26 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: fabsolutely
+ * Date: 16/07/2017
+ * Time: 15:51
+ */
+
+namespace {{NamespaceName}}\App\Task;
+
+
+use {{NamespaceName}}\App\Core\TaskBase;
+
+class TestTask extends TaskBase
+{
+
+    public function getName()
+    {
+        return 'test';
+    }
+
+    public function execute()
+    {
+        return ['task' => 'success'];
+    }
+}

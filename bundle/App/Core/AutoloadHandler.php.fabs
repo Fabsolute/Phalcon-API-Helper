@@ -1,0 +1,63 @@
+<?php
+
+namespace {{NamespaceName}}\App\Core;
+
+use Fabs\LINQ\LINQ;
+use {{NamespaceName}}\App\Config\Configs;
+use {{NamespaceName}}\App\Library\ExceptionHandler;
+use Phalcon\Loader;
+
+/**
+ * Class AutoloadHandler
+ * @package {{NamespaceName}}\App\Core
+ *
+ * @property Configs config
+ */
+class AutoloadHandler extends \Fabs\Rest\Services\AutoloadHandler
+{
+    public function __construct()
+    {
+        $this->registerDirs();
+        $this->registerNamespaces();
+        set_exception_handler([ExceptionHandler::class, 'handle']);
+    }
+
+    private function registerDirs()
+    {
+        $loader = new Loader();
+        $loader_dirs = LINQ::from($this->config->loader_directories)
+            ->select(function ($loader_directory) {
+                return APP_PATH . $loader_directory;
+            })
+            ->toArray();
+        $loader->registerDirs($loader_dirs);
+        $loader->register();
+    }
+
+    private function registerNamespaces()
+    {
+        $loader = new Loader();
+        $namespace_dirs = [];
+
+        $loader_namespaces = $this->config->loader_namespaces;
+
+        foreach ($loader_namespaces as $namespace) {
+            $namespace_cleaned = str_replace('\\', '/', str_replace($this->config->default_namespace, '', $namespace));
+            $namespace_dirs[$namespace] = BASE_PATH . $namespace_cleaned;
+        }
+        $loader->registerNamespaces($namespace_dirs);
+        $loader->register();
+
+
+        if (PHP_SAPI === 'cli') {
+            $pre_load_namespaces = $this->config->task_namespaces;
+        } else {
+            $pre_load_namespaces = $this->config->api_namespaces;
+        }
+
+        foreach ($pre_load_namespaces as $namespace) {
+            $namespace_cleaned = str_replace('\\', '/', str_replace($this->config->default_namespace, '', $namespace));
+            $this->registerNamespace($namespace, BASE_PATH . $namespace_cleaned);
+        }
+    }
+}

@@ -1,0 +1,15 @@
+<?php
+
+namespace {{NamespaceName}}\App\Core;
+
+use {{NamespaceName}}\App\Config\Configs;
+/**
+ * Class TaskBase
+ * @package {{NamespaceName}}\App\Core
+ *
+ * @property Configs config
+ */
+abstract class TaskBase extends \Fabs\Rest\TaskBase
+{
+
+}
