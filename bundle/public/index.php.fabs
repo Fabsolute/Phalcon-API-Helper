@@ -1,6 +1,8 @@
 <?php
 
-include_once __DIR__ . '/../bootstrap.php';
+error_reporting(0); // TODO set error reporting
+
+require_once __DIR__ . '/../bootstrap.php';
 
 $di = new {{NamespaceName}}\App\Core\DI();
 $di->application->handle();
